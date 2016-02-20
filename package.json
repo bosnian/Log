@@ -4,11 +4,14 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "pm2 start app.js -i 0",
+    "stop": "pm2 delete all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ammar Hadzic <ammar.hadzic@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "hapi": "^13.0.0"
+    "hapi": "^13.0.0",
+    "pm2": "^1.0.1"
   }
 }

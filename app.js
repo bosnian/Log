@@ -1,7 +1,7 @@
 var Hapi = require('hapi');
 var server = new Hapi.Server();
 
-server.connection({port: 5000});
+server.connection({port: 3000});
 
 server.ext('onRequest', function(request, reply) {
 	console.log("Mujo")
@@ -11,13 +11,11 @@ server.ext('onRequest', function(request, reply) {
 	},1000)
 	
 });
-var t = 0
 server.route({
     method: 'GET',
     path: '/{yourname*}',
     handler: function(req, reply) {
-			t++;
-        reply( "\n" + process.pid + ' !' + t + "\n")
+			reply( "Radi")
     }
 });
 
