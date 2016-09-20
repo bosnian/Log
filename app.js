@@ -1,26 +1,43 @@
-var Hapi = require('hapi');
-var server = new Hapi.Server();
+var Hapi = require('hapi')
+var mongodb = require('mongodb')
+var handler = require('./handler')
 
-server.connection({port: 3000});
+var server = new Hapi.Server()
+var MongoClient = mongodb.MongoClient
+var url = 'mongodb://analytics:abc123@ds046549.mlab.com:46549/analytics'
 
-server.ext('onRequest', function(request, reply) {
-	console.log("Mujo")
+var db = false
+
+MongoClient.connect(url, { db: { autoReconnect: true } }, function (err, database) {
+  if (err) {
+    console.log('Unable to connect to the mongoDB server. Error:', err);
+		process.exit(1);
+  } else {
+    console.log('Connection established to mongoDB', url);
+		db = database
+  }
+})
+
+server.connection({port: 3000})
+
+server.ext('onPreHandler', function(request, reply) {
 	
-	setTimeout(function(){
+	if(request.payload != null && request.payload.key == "06c4aed327920fd83a81e624b37fb9e3"){
+		request.db = db
 		return reply.continue()
-	},1000)
-	
-});
+	} else {
+		return reply().code(401)
+	}	
+})
+
 server.route({
-    method: 'GET',
-    path: '/{yourname*}',
-    handler: function(req, reply) {
-			reply( "Radi")
-    }
-});
+    method: 'POST',
+    path: '/',
+    handler: handler
+})
 
-server.start(function(){ // boots your server
-    console.log('Now Visit: http://localhost:3000/YOURNAME')
-});
+server.start(function(){
+    console.log('Now Visit: http://localhost:3000/')
+})
 
-module.exports = server;
+module.exports = server
