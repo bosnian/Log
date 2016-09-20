@@ -12,6 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "hapi": "^13.0.0",
-    "pm2": "^1.0.1"
+    "pm2": "^2.0.12"
   }
 }
