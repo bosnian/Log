@@ -1,5 +1,6 @@
 var Hapi = require('hapi')
 var mongodb = require('mongodb')
+var corsHeaders = require('hapi-cors-headers')
 var handler = require('./handler')
 
 var server = new Hapi.Server()
@@ -20,13 +21,14 @@ MongoClient.connect(url, { db: { autoReconnect: true } }, function (err, databas
 
 server.connection({port: 3000})
 
+server.ext('onPreResponse', corsHeaders)
 server.ext('onPreHandler', function(request, reply) {
-	
+
 	if(request.payload != null && request.payload.key == "06c4aed327920fd83a81e624b37fb9e3"){
 		request.db = db
 		return reply.continue()
 	} else {
-		return reply().code(401)
+		return reply().code(404)
 	}	
 })
 
