@@ -23,8 +23,8 @@ server.connection({port: 3000})
 
 server.ext('onPreResponse', corsHeaders)
 server.ext('onPreHandler', function(request, reply) {
-
-	if(request.payload != null && request.payload.key == "06c4aed327920fd83a81e624b37fb9e3"){
+  // console.log(request.payload);
+	if(request.payload != null && request.payload.key != null){
 		request.db = db
 		return reply.continue()
 	} else {
@@ -36,6 +36,14 @@ server.route({
     method: 'POST',
     path: '/',
     handler: handler
+})
+
+server.route({
+  method: 'GET',
+  path: '/',
+  handler: function(req,reply){
+     return reply().code(200);
+  }
 })
 
 server.start(function(){
